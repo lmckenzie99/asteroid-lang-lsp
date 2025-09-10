@@ -43,7 +43,7 @@ const BUILTIN_FUNCTIONS = [
   'abs', 'all', 'any', 'apply', 'bool', 'call', 'chr', 'cmp', 'dict', 'enumerate',
   'filter', 'float', 'format', 'freeze', 'frozenset', 'hash', 'help', 'id', 'int',
   'isinstance', 'issubclass', 'iter', 'len', 'list', 'map', 'max', 'min', 'ord',
-  'println', 'range', 'reduce', 'repr', 'reverse', 'round', 'set', 'sorted', 'str',
+  '@println', 'range', 'reduce', 'repr', 'reverse', 'round', 'set', 'sorted', 'str',
   'sum', 'tuple', 'type', 'zip'
 ];
 
@@ -424,41 +424,37 @@ function analyzeDocument(textDocument: TextDocument): void {
 
 function validateDocument(textDocument: TextDocument, tokens: any[]): Diagnostic[] {
   const diagnostics: Diagnostic[] = [];
-  
-  // Basic syntax validation
-  for (let i = 0; i < tokens.length; i++) {
-    const token = tokens[i];
-    
-    // Check for unterminated strings
-    if (token.type === 'STRING' && token.valid === false) {
+  const lines = textDocument.getText().split('\n');
+
+  // Existing diagnostics...
+
+  lines.forEach((line, idx) => {
+    // Matches: io @println "something" (no parentheses)
+    const printlnNoParensMatch = /^\s*io\s+@println\s+"[^"]*"\s*\.*$/.exec(line);
+
+    // If there is io @println with a string literal only (no +, only one set of quotes), this is OK!
+    if (printlnNoParensMatch) {
+      return; // Acceptable: do not add diagnostic
+    }
+
+    // Matches: io @println ... (no parentheses, but has + operator for concatenation)
+    if (/^\s*io\s+@println\s+[^(\s][^()]*\+[^()]*$/.test(line)) {
       diagnostics.push({
         severity: DiagnosticSeverity.Error,
         range: {
-          start: { line: token.line, character: token.column },
-          end: { line: token.line, character: token.column + token.value.length + 1 }
+          start: { line: idx, character: line.indexOf('@println') },
+          end: { line: idx, character: line.length }
         },
-        message: 'Unterminated string literal',
+        message: 'Missing parentheses in @println invocation when concatenating variables/strings. Use: io @println ("...")',
         source: 'asteroid-lsp'
       });
     }
-    
-    // Check for invalid numbers
-    if (token.type === 'NUMBER' && !/^\d+\.?\d*$/.test(token.value)) {
-      diagnostics.push({
-        severity: DiagnosticSeverity.Error,
-        range: {
-          start: { line: token.line, character: token.column },
-          end: { line: token.line, character: token.column + token.value.length }
-        },
-        message: 'Invalid number format',
-        source: 'asteroid-lsp'
-      });
-    }
-  }
-  
+  });
+
+  // ...existing token-based diagnostics...
+
   return diagnostics;
 }
-
 // Event handlers
 documents.onDidChangeContent(change => {
   analyzeDocument(change.document);
@@ -533,7 +529,7 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): Com
 
   // If typing "io", prioritize println
   if (/\bio\b/i.test(textBeforeCursor)) {
-    const printlnIndex = completions.findIndex(item => item.label === "println");
+    const printlnIndex = completions.findIndex(item => item.label === "@println");
     if (printlnIndex !== -1) {
       const printlnItem = completions.splice(printlnIndex, 1)[0];
       completions.unshift(printlnItem);
