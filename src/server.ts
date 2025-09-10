@@ -469,10 +469,30 @@ connection.onDidChangeWatchedFiles(_change => {
 });
 
 // Completion provider
+
 connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): CompletionItem[] => {
   const completions: CompletionItem[] = [];
-  
-  // Add keywords
+  const uri = _textDocumentPosition.textDocument.uri;
+  const document = documents.get(uri);
+  let textBeforeCursor = "";
+
+  if (document) {
+    const position = _textDocumentPosition.position;
+    const lines = document.getText().split('\n');
+    if (position.line < lines.length) {
+      textBeforeCursor = lines[position.line].substring(0, position.character);
+    }
+  }
+
+  // Suppress completions after println invocation
+  if (
+    /@println\s*\($/.test(textBeforeCursor) ||         // after '@println('
+    /^@println\s*$/.test(textBeforeCursor.trim())      // at end of line after '@println'
+  ) {
+    return [];
+  }
+
+  // Build completions as usual
   KEYWORDS.forEach(keyword => {
     completions.push({
       label: keyword,
@@ -480,8 +500,7 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): Com
       detail: `Asteroid keyword: ${keyword}`
     });
   });
-  
-  // Add built-in functions
+
   BUILTIN_FUNCTIONS.forEach(func => {
     completions.push({
       label: func,
@@ -489,8 +508,7 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): Com
       detail: `Built-in function: ${func}`
     });
   });
-  
-  // Add system modules
+
   SYSTEM_MODULES.forEach(mod => {
     completions.push({
       label: mod,
@@ -498,9 +516,8 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): Com
       detail: `System module: ${mod}`
     });
   });
-  
+
   // Add document symbols
-  const uri = _textDocumentPosition.textDocument.uri;
   const docInfo = documentInfos.get(uri);
   if (docInfo) {
     docInfo.symbols.forEach(symbol => {
@@ -513,10 +530,18 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): Com
       });
     });
   }
-  
+
+  // If typing "io", prioritize println
+  if (/\bio\b/i.test(textBeforeCursor)) {
+    const printlnIndex = completions.findIndex(item => item.label === "println");
+    if (printlnIndex !== -1) {
+      const printlnItem = completions.splice(printlnIndex, 1)[0];
+      completions.unshift(printlnItem);
+    }
+  }
+
   return completions;
 });
-
 connection.onCompletionResolve((item: CompletionItem): CompletionItem => {
   return item;
 });
