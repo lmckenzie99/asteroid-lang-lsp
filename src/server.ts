@@ -88,7 +88,7 @@ connection.onInitialize((params: InitializeParams) => {
       textDocumentSync: TextDocumentSyncKind.Incremental,
       completionProvider: {
         resolveProvider: true,
-        triggerCharacters: ['.', '@', ' ']
+        triggerCharacters: ['@', ' ']
       },
       hoverProvider: true,
       definitionProvider: true,
