@@ -1,7 +1,7 @@
 # 🌌 Asteroid Language Server Protocol (LSP)
 
 A comprehensive Language Server Protocol implementation for the [Asteroid programming language](https://asteroid-lang.readthedocs.io/), providing rich IDE support across multiple editors.
-
+## Version 0.0.1a
 ## ✨ Features
 
 ### 🚀 Core LSP Features
@@ -88,11 +88,11 @@ cp -r editors/neovim/lua ~/.config/nvim/
 
 ### Basic Asteroid Code
 ```asteroid
-% Load system modules
+-- Load system modules
 load system io
 load system math
 
-% Define a function with pattern matching
+-- Define a function with pattern matching
 function factorial with n do
   match n with
     0 -> 1
@@ -101,19 +101,19 @@ function factorial with n do
   end
 end
 
-% Print result
+-- Print result
 let result = factorial(5)
 io.println("5! = " + str(result))
 ```
 
 ### Pattern Matching and Data Types
 ```asteroid
-% Define algebraic data types
+-- Define algebraic data types
 data Shape = Circle with radius
            | Rectangle with width, height
            | Triangle with a, b, c
 
-% Pattern matching function
+-- Pattern matching function
 function area with shape do
   match shape with
     Circle with r -> math.pi * r * r
@@ -124,7 +124,7 @@ function area with shape do
   end
 end
 
-% Usage
+-- Usage
 let shapes = [Circle(5.0), Rectangle(10, 20), Triangle(3, 4, 5)]
 for shape in shapes do
   io.println("Area: " + str(area(shape)))
@@ -133,7 +133,7 @@ end
 
 ### Advanced Features
 ```asteroid
-% Struct with methods
+-- Struct with methods
 struct Point with
   constructor Point with x, y do
     let @x = x
@@ -151,7 +151,7 @@ struct Point with
   end
 end
 
-% Lambda and list comprehensions
+-- Lambda and list comprehensions
 let points = [Point(i, i*2) for i in range(1, 6)]
 let distances = map(lambda p -> p.distance(Point(0, 0)), points)
 ```
