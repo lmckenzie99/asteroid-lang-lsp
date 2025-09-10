@@ -157,10 +157,12 @@ class AsteroidLexer {
     }
   }
 
-  private readString(): string {
+  private readString(): { value: string, valid: boolean } {
     const quote = this.peek();
     this.advance(); // skip opening quote
     let value = '';
+    let valid = true;
+    
     while (this.peek() && this.peek() !== quote) {
       if (this.peek() === '\\') {
         this.advance(); // skip escape
@@ -173,10 +175,14 @@ class AsteroidLexer {
         this.advance();
       }
     }
+    
     if (this.peek() === quote) {
       this.advance(); // skip closing quote
+    } else {
+      valid = false; // unterminated string
     }
-    return value;
+    
+    return { value, valid };
   }
 
   private readNumber(): string {
@@ -197,7 +203,7 @@ class AsteroidLexer {
     return value;
   }
 
-  public tokenize(): Array<{type: string, value: string, line: number, column: number}> {
+  public tokenize(): Array<{type: string, value: string, line: number, column: number, valid?: boolean}> {
     const tokens = [];
     
     while (this.pos < this.text.length) {
@@ -211,8 +217,14 @@ class AsteroidLexer {
       const char = this.peek();
 
       if (char === '"' || char === "'") {
-        const value = this.readString();
-        tokens.push({type: 'STRING', value, line: startLine, column: startColumn});
+        const stringResult = this.readString();
+        tokens.push({
+          type: 'STRING', 
+          value: stringResult.value, 
+          line: startLine, 
+          column: startColumn,
+          valid: stringResult.valid
+        });
       } else if (/\d/.test(char)) {
         const value = this.readNumber();
         tokens.push({type: 'NUMBER', value, line: startLine, column: startColumn});
@@ -417,14 +429,13 @@ function validateDocument(textDocument: TextDocument, tokens: any[]): Diagnostic
   for (let i = 0; i < tokens.length; i++) {
     const token = tokens[i];
     
-    // Check for unmatched quotes
-    if (token.type === 'STRING' && (token.value.length === 0 || 
-        (!token.value.startsWith('"') && !token.value.startsWith("'")))) {
+    // Check for unterminated strings
+    if (token.type === 'STRING' && token.valid === false) {
       diagnostics.push({
         severity: DiagnosticSeverity.Error,
         range: {
           start: { line: token.line, character: token.column },
-          end: { line: token.line, character: token.column + token.value.length }
+          end: { line: token.line, character: token.column + token.value.length + 1 }
         },
         message: 'Unterminated string literal',
         source: 'asteroid-lsp'
