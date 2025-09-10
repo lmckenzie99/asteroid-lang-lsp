@@ -1,6 +1,6 @@
 {
   "name": "asteroid-language-server",
-  "version": "0.0.1-a",
+  "version": "0.0.2-a",
   "description": "Language Server Protocol implementation for the Asteroid programming language",
   "main": "out/server.js",
   "scripts": {

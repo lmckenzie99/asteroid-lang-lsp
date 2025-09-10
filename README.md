@@ -1,7 +1,7 @@
 # 🌌 Asteroid Language Server Protocol (LSP)
 
 A comprehensive Language Server Protocol implementation for the [Asteroid programming language](https://asteroid-lang.readthedocs.io/), providing rich IDE support across multiple editors.
-## Version 0.0.1a
+## Version 0.0.2a
 ## ✨ Features
 
 ### 🚀 Core LSP Features
