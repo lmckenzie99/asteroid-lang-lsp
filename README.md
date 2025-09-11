@@ -45,18 +45,19 @@ A comprehensive Language Server Protocol implementation for the [Asteroid progra
 
 ### Installation Options
 
-#### Option 1: Global Installation (Recommended)
-```bash
-npm install -g asteroid-language-server
-```
-
-#### Option 2: Build from Source
+#### Option 1: Build from Source (***Currently Recommended***)
 ```bash
 git clone https://github.com/lmckenzie99/asteroid-lang-lsp.git
 cd asteroid-language-server
 npm install
 npm run build
 ```
+#### Option 2: Global Installation (***WIP***)
+```bash
+npm install -g asteroid-language-server
+```
+
+
 
 ## 📝 Editor Setup
 
