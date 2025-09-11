@@ -24,7 +24,7 @@ A comprehensive Language Server Protocol implementation for the [Asteroid progra
 - **Module System** - `load system module`
 - **Lambda Expressions** - `lambda x -> x + 1`
 - **List Comprehensions** - `[x for x in list if condition]`
-- **Comments** - Line comments with `%`
+- **Comments** - Line comments with `--`
 
 ### 🔧 Editor Support
 - **VS Code** - Full extension with syntax highlighting and IntelliSense
@@ -80,6 +80,7 @@ cp -r editors/neovim/lua ~/.config/nvim/
 
 
 ### 🟧 Other Editors
+### *testing needed*
 - **Emacs**: Use with `lsp-mode` 
 - **Vim**: Compatible with `vim-lsp` 
 - **Sublime Text**: Works with LSP package 
