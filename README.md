@@ -6,14 +6,18 @@ A comprehensive Language Server Protocol implementation for the [Asteroid progra
 
 ### 🚀 Core LSP Features
 - **Syntax Highlighting** - Full syntax highlighting for Asteroid code
-- **Autocompletion** - Intelligent code completion with context awareness *work in progress*
+- **Autocompletion** - Code completion with context awareness
 - **Error Detection** - Real-time syntax error checking and reporting
-- **Hover Information** - Type and definition info on hover *work in progress*
-- **Go to Definition** - Jump to symbol definitions *work in progress*
-- **Find References** - Find all uses of a symbol
+
 - **Document Symbols** - Outline view of functions, structs, and variables
-- **Workspace Symbols** - Search symbols across the entire workspace *work in progress*
-- **Rename Refactoring** - Rename symbols with scope awareness *work in progress*
+- **Workspace Symbols** - Search symbols across the entire workspace 
+- **Rename Refactoring** - Rename symbols with scope awareness
+- 
+### 🚧 Roadmap
+- **Intelligent Autocompletion** - Content aware smart suggestions
+- **Enhanced error detection** - Some errors are not detected
+- **Hover Information** - Type and definition info on hover 
+- **Go to Definition** - Jump to symbol definitions 
 
 ### 🎯 Asteroid Language Support
 - **Functions** - `function name with params do ... end`
@@ -27,9 +31,9 @@ A comprehensive Language Server Protocol implementation for the [Asteroid progra
 - **Comments** - Line comments with `--`
 
 ### 🔧 Editor Support
-- **VS Code** - Full extension with syntax highlighting and IntelliSense
+- **VS Code** - Full extension with syntax highlighting and IntelliSense *testing needed*
 - **Neovim** - Complete LSP integration with nvim-lspconfig
-- **Emacs** - Compatible with lsp-mode
+- **Emacs** - Compatible with lsp-mode *testing needed*
 - **Vim** - Works with vim-lsp and similar plugins
 
 ## 🚀 Quick Start
@@ -58,7 +62,7 @@ npm run build
 
 ### 🟦 VS Code
 The easiest way to get started with Asteroid in VS Code:
-
+*testing needed*
 ```bash
 # Install the extension
 cd editors/vscode
@@ -178,19 +182,6 @@ npm test
 # Watch mode for development
 npm run watch
 ```
-
-### Testing
-```bash
-# Run all tests
-npm test
-
-# Run with coverage
-npm run test:coverage
-
-# Run specific test suite
-npm test -- --testPathPattern=lexer
-```
-
 
 
 ## 🤝 Contributing
