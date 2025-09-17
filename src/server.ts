@@ -436,8 +436,13 @@ function validateDocument(textDocument: TextDocument, tokens: any[]): Diagnostic
     if (printlnNoParensMatch) {
       return; // Acceptable: do not add diagnostic
     }
+  
+    //if a comment line '--', do not check it or run autocompletions
+    if (/^\s*--/.test(line)) {
+      return; // Skip comments
+    }
 
-    //if @println is called with no io preceding it, throw error about missing io on line
+   //if @println is called with no io preceding it, throw error about missing io on line
     if (/^\s*@println\s+[^(\s][^()]*$/.test(line)) {
       diagnostics.push({
         severity: DiagnosticSeverity.Error,
@@ -448,7 +453,7 @@ function validateDocument(textDocument: TextDocument, tokens: any[]): Diagnostic
         message: 'Missing "io" module in @println invocation. Use: io @println ("...")',
         source: 'asteroid-lsp'
       });
-    }
+    } 
 
     // Matches: io @println ... (no parentheses, but has + operator for concatenation)
     if (/^\s*io\s+@println\s+[^(\s][^()]*\+[^()]*$/.test(line)) {
@@ -490,6 +495,20 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): Com
     const lines = document.getText().split('\n');
     if (position.line < lines.length) {
       textBeforeCursor = lines[position.line].substring(0, position.character);
+      
+      // Check if the current line contains the comment token '--'
+      const currentLine = lines[position.line];
+      const commentIndex = currentLine.indexOf('--');
+      
+      // If comment token exists and cursor is after it, suppress completions
+      if (commentIndex !== -1 && position.character > commentIndex) {
+        return [];
+      }
+      
+      // Alternative: If you want to suppress completions for any line with '--' anywhere
+      // if (currentLine.includes('--')) {
+      //   return [];
+      // }
     }
   }
 
@@ -551,10 +570,6 @@ connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): Com
 
   return completions;
 });
-connection.onCompletionResolve((item: CompletionItem): CompletionItem => {
-  return item;
-});
-
 // Hover provider
 connection.onHover((_textDocumentPosition: TextDocumentPositionParams): Hover | undefined => {
   const document = documents.get(_textDocumentPosition.textDocument.uri);
