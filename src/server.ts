@@ -437,7 +437,7 @@ function validateDocument(textDocument: TextDocument, tokens: any[]): Diagnostic
       return; // Acceptable: do not add diagnostic
     }
 
-    //if @println is called with no io preceding it, throw error about missing io on line
+   //if @println is called with no io preceding it, throw error about missing io on line
     if (/^\s*@println\s+[^(\s][^()]*$/.test(line)) {
       diagnostics.push({
         severity: DiagnosticSeverity.Error,
@@ -448,7 +448,7 @@ function validateDocument(textDocument: TextDocument, tokens: any[]): Diagnostic
         message: 'Missing "io" module in @println invocation. Use: io @println ("...")',
         source: 'asteroid-lsp'
       });
-    }
+    } 
 
     // Matches: io @println ... (no parentheses, but has + operator for concatenation)
     if (/^\s*io\s+@println\s+[^(\s][^()]*\+[^()]*$/.test(line)) {
