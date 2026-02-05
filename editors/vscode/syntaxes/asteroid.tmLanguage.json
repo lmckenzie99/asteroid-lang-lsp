@@ -1,0 +1,197 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Asteroid",
+  "scopeName": "source.asteroid",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#strings" },
+    { "include": "#numbers" },
+    { "include": "#keywords-control" },
+    { "include": "#keywords-declaration" },
+    { "include": "#keywords-operator" },
+    { "include": "#constants" },
+    { "include": "#builtins" },
+    { "include": "#system-modules" },
+    { "include": "#at-functions" },
+    { "include": "#function-definition" },
+    { "include": "#struct-definition" },
+    { "include": "#data-definition" },
+    { "include": "#variable-declaration" },
+    { "include": "#load-statement" },
+    { "include": "#operators" },
+    { "include": "#punctuation" },
+    { "include": "#identifiers" }
+  ],
+  "repository": {
+    "comments": {
+      "name": "comment.line.double-dash.asteroid",
+      "match": "--.*$"
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.asteroid",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.asteroid",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.single.asteroid",
+          "begin": "'",
+          "end": "'",
+          "patterns": [
+            {
+              "name": "constant.character.escape.asteroid",
+              "match": "\\\\."
+            }
+          ]
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.float.asteroid",
+          "match": "\\b\\d+\\.\\d+\\b"
+        },
+        {
+          "name": "constant.numeric.integer.asteroid",
+          "match": "\\b\\d+\\b"
+        }
+      ]
+    },
+    "keywords-control": {
+      "name": "keyword.control.asteroid",
+      "match": "\\b(if|elif|else|for|while|loop|do|end|match|with|try|catch|throw|break|return|yield|escape|step|to|until|in)\\b"
+    },
+    "keywords-declaration": {
+      "name": "keyword.declaration.asteroid",
+      "match": "\\b(function|struct|class|constructor|data|module|let|global|nonlocal|load|system|lambda|unload)\\b"
+    },
+    "keywords-operator": {
+      "name": "keyword.operator.word.asteroid",
+      "match": "\\b(and|or|not|is|assert|eval)\\b"
+    },
+    "constants": {
+      "name": "constant.language.asteroid",
+      "match": "\\b(true|false|none)\\b"
+    },
+    "builtins": {
+      "name": "support.function.builtin.asteroid",
+      "match": "\\b(abs|all|any|apply|bool|call|chr|cmp|dict|enumerate|filter|float|format|freeze|frozenset|hash|help|id|int|isinstance|issubclass|iter|len|list|map|max|min|ord|range|reduce|repr|reverse|round|set|sorted|str|sum|tuple|type|zip)\\b"
+    },
+    "system-modules": {
+      "name": "support.module.asteroid",
+      "match": "(?<=load\\s+system\\s+)\\b(io|math|os|random|string|time|util)\\b"
+    },
+    "at-functions": {
+      "name": "support.function.special.asteroid",
+      "match": "@[a-zA-Z_][a-zA-Z0-9_]*"
+    },
+    "function-definition": {
+      "match": "\\b(function)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+      "captures": {
+        "1": { "name": "keyword.declaration.function.asteroid" },
+        "2": { "name": "entity.name.function.asteroid" }
+      }
+    },
+    "struct-definition": {
+      "match": "\\b(struct)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+      "captures": {
+        "1": { "name": "keyword.declaration.struct.asteroid" },
+        "2": { "name": "entity.name.type.asteroid" }
+      }
+    },
+    "data-definition": {
+      "match": "\\b(data)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+      "captures": {
+        "1": { "name": "keyword.declaration.data.asteroid" },
+        "2": { "name": "entity.name.type.asteroid" }
+      }
+    },
+    "variable-declaration": {
+      "match": "\\b(let)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+      "captures": {
+        "1": { "name": "keyword.declaration.variable.asteroid" },
+        "2": { "name": "variable.other.asteroid" }
+      }
+    },
+    "load-statement": {
+      "match": "\\b(load)\\s+(system)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+      "captures": {
+        "1": { "name": "keyword.declaration.asteroid" },
+        "2": { "name": "keyword.declaration.asteroid" },
+        "3": { "name": "support.module.asteroid" }
+      }
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.arrow.asteroid",
+          "match": "->|=>"
+        },
+        {
+          "name": "keyword.operator.comparison.asteroid",
+          "match": "==|!=|<=|>=|<|>"
+        },
+        {
+          "name": "keyword.operator.assignment.asteroid",
+          "match": "="
+        },
+        {
+          "name": "keyword.operator.arithmetic.asteroid",
+          "match": "\\+|-|\\*|/|%|\\^"
+        }
+      ]
+    },
+    "punctuation": {
+      "patterns": [
+        {
+          "name": "punctuation.separator.comma.asteroid",
+          "match": ","
+        },
+        {
+          "name": "punctuation.terminator.dot.asteroid",
+          "match": "\\."
+        },
+        {
+          "name": "punctuation.section.parens.begin.asteroid",
+          "match": "\\("
+        },
+        {
+          "name": "punctuation.section.parens.end.asteroid",
+          "match": "\\)"
+        },
+        {
+          "name": "punctuation.section.brackets.begin.asteroid",
+          "match": "\\["
+        },
+        {
+          "name": "punctuation.section.brackets.end.asteroid",
+          "match": "\\]"
+        },
+        {
+          "name": "punctuation.section.braces.begin.asteroid",
+          "match": "\\{"
+        },
+        {
+          "name": "punctuation.section.braces.end.asteroid",
+          "match": "\\}"
+        },
+        {
+          "name": "punctuation.pipe.asteroid",
+          "match": "\\|"
+        }
+      ]
+    },
+    "identifiers": {
+      "name": "variable.other.asteroid",
+      "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b"
+    }
+  }
+}

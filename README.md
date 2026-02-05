@@ -62,15 +62,112 @@ npm install -g asteroid-language-server
 ## 📝 Editor Setup
 
 ### 🟦 VS Code
-The easiest way to get started with Asteroid in VS Code:
-*testing needed*
+
+The VS Code extension lives in `editors/vscode/` and connects to the Asteroid LSP server that is built from the repository root. Because the extension references the server at `../../out/server.js`, the full repository must be present and built.
+
+#### Prerequisites
+
+| Requirement | Minimum version |
+|-------------|-----------------|
+| **Node.js** | >= 16.0.0 |
+| **npm** | (bundled with Node) |
+| **VS Code** | >= 1.75.0 |
+
+#### Step 1 — Clone the repository
+
 ```bash
-# Install the extension
+git clone https://github.com/lmckenzie99/asteroid-lang-lsp.git
+cd asteroid-lang-lsp
+```
+
+#### Step 2 — Build the language server
+
+```bash
+npm install
+npm run build
+```
+
+This compiles `src/server.ts` into `out/server.js`, which the extension will launch.
+
+#### Step 3 — Build the extension
+
+```bash
 cd editors/vscode
 npm install
 npm run compile
-code --install-extension .
 ```
+
+This compiles the extension client (`src/extension.ts` → `out/extension.js`).
+
+#### Step 4 — Install in VS Code
+
+**Option A: Development Host (recommended for testing)**
+
+1. Open the **repository root** in VS Code:
+   ```bash
+   code /path/to/asteroid-lang-lsp
+   ```
+2. Press **F5** (or **Run → Start Debugging**).
+3. A new VS Code window (the *Extension Development Host*) will open with the Asteroid extension active.
+4. Open any `.ast` or `.asteroid` file in that window to verify syntax highlighting, completions, and diagnostics are working.
+
+**Option B: Package as a `.vsix` and install permanently**
+
+Requires the `@vscode/vsce` CLI:
+```bash
+# Install vsce if you don't have it
+npm install -g @vscode/vsce
+
+# Package the extension (run from editors/vscode/)
+cd editors/vscode
+vsce package
+# This produces a file like asteroid-lang-0.0.1.vsix
+
+# Install the packaged extension
+code --install-extension asteroid-lang-0.0.1.vsix
+```
+
+> **Note:** Because the extension resolves the language server relative to its
+> own install location (`../../out/server.js`), the packaged `.vsix` approach
+> works best when the extension is installed from within the cloned repository
+> tree. If you move the repository after installing, you may need to reinstall.
+
+#### What you get
+
+| Feature | Description |
+|---------|-------------|
+| **Syntax highlighting** | Full TextMate grammar for all Asteroid constructs |
+| **IntelliSense** | Completions for keywords, built-in functions, and document symbols |
+| **Diagnostics** | Real-time error detection (e.g. `@println` usage, unterminated strings) |
+| **Hover info** | Type and definition information on hover |
+| **Go to Definition** | Jump to function, struct, and variable definitions |
+| **Document Symbols** | Outline view of functions, structs, and variables |
+| **Workspace Symbols** | Search symbols across all open Asteroid files |
+| **Snippets** | 13 snippets for common patterns (`func`, `if`, `for`, `match`, etc.) |
+| **Comment toggling** | `Ctrl+/` toggles `--` line comments |
+| **Bracket matching** | Auto-close and matching for `()`, `[]`, `{}`, `""`, `''` |
+
+#### Extension settings
+
+These settings are available under **Settings → Asteroid Language**:
+
+- `asteroid.maxNumberOfProblems` — Maximum number of diagnostics the server reports (default `100`).
+- `asteroid.trace.server` — Trace level for LSP communication: `off` | `messages` | `verbose` (default `off`). Useful for debugging.
+
+#### Troubleshooting
+
+**Extension activates but no language features appear**
+- Make sure the root language server is built (`npm run build` from the repo root). The extension expects `out/server.js` to exist two directories above `editors/vscode/`.
+- Open **Output → Asteroid Language Server** in VS Code to check for errors.
+
+**Syntax highlighting works but no completions / diagnostics**
+- The TextMate grammar (syntax highlighting) is bundled with the extension and works independently. Completions and diagnostics require the LSP server to be running. Check the output panel for server startup errors.
+
+**"Cannot find module" error in the output panel**
+- Run `npm install` in both the repository root *and* `editors/vscode/` to ensure all dependencies are present.
+
+**File not recognized as Asteroid**
+- Ensure the file has a `.ast` or `.asteroid` extension. You can also set the language manually via the VS Code language mode selector in the bottom-right status bar.
 ### 🟩 Neovim
 For Neovim with nvim-lspconfig:
 
