@@ -1,0 +1,97 @@
+{
+  "name": "asteroid-lang",
+  "displayName": "Asteroid Language",
+  "description": "Language support for the Asteroid programming language — syntax highlighting, IntelliSense, diagnostics, and more.",
+  "version": "0.0.1",
+  "publisher": "asteroid-lang",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Linters",
+    "Snippets"
+  ],
+  "keywords": [
+    "asteroid",
+    "pattern-matching",
+    "lsp",
+    "language-server"
+  ],
+  "activationEvents": [
+    "onLanguage:asteroid"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "asteroid",
+        "aliases": [
+          "Asteroid",
+          "asteroid"
+        ],
+        "extensions": [
+          ".ast",
+          ".asteroid"
+        ],
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./icons/asteroid-icon.png",
+          "dark": "./icons/asteroid-icon.png"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "language": "asteroid",
+        "scopeName": "source.asteroid",
+        "path": "./syntaxes/asteroid.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "asteroid",
+        "path": "./snippets/asteroid.json"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Asteroid Language",
+      "properties": {
+        "asteroid.maxNumberOfProblems": {
+          "scope": "resource",
+          "type": "number",
+          "default": 100,
+          "description": "Controls the maximum number of problems produced by the server."
+        },
+        "asteroid.trace.server": {
+          "scope": "window",
+          "type": "string",
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
+          "default": "off",
+          "description": "Traces the communication between VS Code and the language server."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -b",
+    "watch": "tsc -b -w",
+    "package": "vsce package",
+    "lint": "eslint src --ext ts"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^8.1.0"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.75.0",
+    "@types/node": "^18.0.0",
+    "typescript": "^5.0.0"
+  }
+}

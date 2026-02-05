@@ -1,0 +1,113 @@
+{
+  "Function Definition": {
+    "prefix": "function",
+    "body": [
+      "function ${1:name} with ${2:params} do",
+      "\t$0",
+      "end"
+    ],
+    "description": "Define a new Asteroid function"
+  },
+  "If Statement": {
+    "prefix": "if",
+    "body": [
+      "if ${1:condition} do",
+      "\t$0",
+      "end"
+    ],
+    "description": "If statement"
+  },
+  "If-Else Statement": {
+    "prefix": "ifelse",
+    "body": [
+      "if ${1:condition} do",
+      "\t$2",
+      "else do",
+      "\t$0",
+      "end"
+    ],
+    "description": "If-else statement"
+  },
+  "For Loop": {
+    "prefix": "for",
+    "body": [
+      "for ${1:item} in ${2:collection} do",
+      "\t$0",
+      "end"
+    ],
+    "description": "For loop"
+  },
+  "While Loop": {
+    "prefix": "while",
+    "body": [
+      "while ${1:condition} do",
+      "\t$0",
+      "end"
+    ],
+    "description": "While loop"
+  },
+  "Match Expression": {
+    "prefix": "match",
+    "body": [
+      "match ${1:expression} with",
+      "\t${2:pattern} -> ${3:result}.",
+      "end"
+    ],
+    "description": "Pattern matching expression"
+  },
+  "Struct Definition": {
+    "prefix": "struct",
+    "body": [
+      "struct ${1:Name} with",
+      "\tconstructor(${2:params}).",
+      "end"
+    ],
+    "description": "Define a new struct"
+  },
+  "Data Type": {
+    "prefix": "data",
+    "body": [
+      "data ${1:TypeName} = ${2:Constructor1} | ${3:Constructor2}."
+    ],
+    "description": "Define an algebraic data type"
+  },
+  "Load System Module": {
+    "prefix": "load",
+    "body": [
+      "load system ${1|io,math,os,random,string,time,util|}."
+    ],
+    "description": "Load a system module"
+  },
+  "Let Variable": {
+    "prefix": "let",
+    "body": [
+      "let ${1:name} = ${2:value}."
+    ],
+    "description": "Declare a variable"
+  },
+  "Print Line": {
+    "prefix": "println",
+    "body": [
+      "io @println (\"${1:message}\")."
+    ],
+    "description": "Print a line (requires 'load system io')"
+  },
+  "Try-Catch": {
+    "prefix": "try",
+    "body": [
+      "try do",
+      "\t$1",
+      "catch ${2:Exception} do",
+      "\t$0",
+      "end"
+    ],
+    "description": "Try-catch block"
+  },
+  "Lambda": {
+    "prefix": "lambda",
+    "body": [
+      "lambda ${1:x} -> ${2:expression}"
+    ],
+    "description": "Lambda expression"
+  }
+}
